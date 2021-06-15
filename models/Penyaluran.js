@@ -1,20 +1,22 @@
-const Sequelize = require('sequelize');
-const db = require('../config/db.js');
+module.exports = (db, DataTypes) => {
+    const Penyaluran = db.define(
+        "tb_penyaluran",
+        {
+            id_penyaluran : {type : DataTypes.INTEGER, autoIncrement : true, primaryKey : true},
+            id_penerima : {type: DataTypes.INTEGER, foreignKey : true},
+            tanggal : {type: DataTypes.DATEONLY},
+            jumlah : {type: DataTypes.INTEGER},
+        },
+        {
+            freezeTableName: true,
+            createdAt: false,
+            updatedAt: false,
+    
+        });
 
-const Penyaluran = db.define(
-    "tb_penyaluran",
-    {
-        id_penyaluran : {type : Sequelize.INTEGER, autoIncrement : true, primaryKey : true},
-        id_penerima : {type: Sequelize.INTEGER},
-        tanggal : {type: Sequelize.DATEONLY},
-        jumlah : {type: Sequelize.INTEGER},
-    },
-    {
-        freezeTableName: true,
-        createdAt: false,
-        updatedAt: false,
+        // Donatur.associate = function(models){
+        //     Donatur.hasMany(models.Donasi,{foreignKey:'id_donatur'})    
+        // };
 
-    }
-)
-
-module.exports = Penyaluran;
+        return Penyaluran;
+}

@@ -1,21 +1,24 @@
-const Sequelize = require('sequelize');
-const db = require('../config/db.js');
+module.exports = (db, DataTypes)=>{
+    const Donasi = db.define(
+        "tb_donasi",
+        {
+            id_donasi : {type : DataTypes.INTEGER, autoIncrement : true, primaryKey : true},
+            id_donatur : {type: DataTypes.INTEGER, foreignKey : true},
+            tanggal : {type: DataTypes.DATEONLY},
+            jumlah : {type: DataTypes.INTEGER},
+            bukti : {type: DataTypes.STRING},      
+        },
+        {
+            freezeTableName: true,
+            createdAt: false,
+            updatedAt: false,
+    
+        }
+    );
+    
+    // Donasi.associate = (models)=>{
+    //     Donasi.belongsTo(models.Donatur,{foreignKey:'id_donatur'})    
+    // };
 
-const Donasi = db.define(
-    "tb_donasi",
-    {
-        id_donasi : {type : Sequelize.INTEGER, autoIncrement : true, primaryKey : true},
-        id_donatur : {type: Sequelize.INTEGER},
-        tanggal : {type: Sequelize.DATEONLY},
-        jumlah : {type: Sequelize.INTEGER},
-        bukti : {type: Sequelize.STRING},
-    },
-    {
-        freezeTableName: true,
-        createdAt: false,
-        updatedAt: false,
-
-    }
-)
-
-module.exports = Donasi;
+    return Donasi;
+}
