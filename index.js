@@ -6,6 +6,7 @@ const Donasi = require('./models').donasi;
 const Penerima = require('./models').penerima;
 const Penyaluran = require('./models').penyaluran;
 
+const port = process.env
 app.get('/', (req, res)=> res.send('response berhasil'));
 app.use(express.urlencoded({extended:true}));
 
