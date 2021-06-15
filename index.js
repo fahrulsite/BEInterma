@@ -6,7 +6,7 @@ const Donasi = require('./models').donasi;
 const Penerima = require('./models').penerima;
 const Penyaluran = require('./models').penyaluran;
 
-const port = process.env
+const port = process.env.PORT
 app.get('/', (req, res)=> res.send('response berhasil'));
 app.use(express.urlencoded({extended:true}));
 
@@ -14,7 +14,7 @@ app.use(express.urlencoded({extended:true}));
 db.authenticate().then(()=>
     console.log('berhasil konek')
 );
-app.listen(4500, ()=>{
+app.listen(port, ()=>{
     console.log("port berjalan di 5000");
 })
 
