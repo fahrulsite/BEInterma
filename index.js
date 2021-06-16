@@ -272,10 +272,10 @@ app.delete('/penyaluran/:id_penyaluran', async (req, res)=>{
 //update penerima by id
 app.put('/penyaluran/:id_penyaluran', async (req, res)=>{
     try {
-        const {id_penyaluran, tanggal, jumlah} = req.body
+        const {id_penerima, tanggal, jumlah} = req.body
         const id = req.params.id_penyaluran
         const updatePenyaluran = await Penyaluran.update({
-            id_penyaluran,
+            id_penerima,
             tanggal,
             jumlah
         },{
