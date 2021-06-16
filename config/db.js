@@ -1,6 +1,6 @@
 const sequelize = require ('sequelize');
 const db = new sequelize({
-    host: "db.infiniteuny.id/",
+    host: "db.infiniteuny.id",
     port: "3306",
     database: "u1005343_fahrulsite",
     username: "u1005343_fahrulsite",
