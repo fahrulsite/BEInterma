@@ -5,6 +5,7 @@ const Donatur = require('./models').donatur;
 const Donasi = require('./models').donasi;
 const Penerima = require('./models').penerima;
 const Penyaluran = require('./models').penyaluran;
+const Admin = require('./models').admin;
 
 const port = 4500
 app.get('/', (req, res)=> res.send('response berhasil'));
