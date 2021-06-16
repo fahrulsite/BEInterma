@@ -6,7 +6,7 @@ const Donasi = require('./models').donasi;
 const Penerima = require('./models').penerima;
 const Penyaluran = require('./models').penyaluran;
 
-const port = process.env.PORT
+const port = 4500
 app.get('/', (req, res)=> res.send('response berhasil'));
 app.use(express.urlencoded({extended:true}));
 
@@ -15,7 +15,7 @@ db.authenticate().then(()=>
     console.log('berhasil konek')
 );
 app.listen(port, ()=>{
-    console.log("port berjalan di 5000");
+    console.log("port berjalan di ");
 })
 
 //create donatur

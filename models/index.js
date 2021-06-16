@@ -11,6 +11,7 @@ db.donasi = require("./Donasi.js")(sequelize, Sequelize);
 db.donatur = require("./Donatur.js")(sequelize, Sequelize);
 db.penerima = require("./Penerima.js")(sequelize, Sequelize);
 db.penyaluran = require("./Penyaluran.js")(sequelize, Sequelize);
+db.admin = require("./Admin.js")(sequelize, Sequelize);
 
 db.donatur.hasMany(db.donasi, { as: "donasi" });
 db.donasi.belongsTo(db.donatur, {
