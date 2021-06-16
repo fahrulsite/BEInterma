@@ -1,10 +1,10 @@
 const sequelize = require ('sequelize');
 const db = new sequelize({
-    host: "freedb.tech",
+    host: "db.infiniteuny.id/",
     port: "3306",
-    database: "freedbtech_interma",
-    username: "freedbtech_interma",
-    password: "mantapjiwa",
+    database: "u1005343_fahrulsite",
+    username: "u1005343_fahrulsite",
+    password: "Fahrul2016",
     dialect : "mysql",
 });
 
