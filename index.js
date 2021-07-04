@@ -8,7 +8,7 @@ const Penyaluran = require('./models').penyaluran;
 const Admin = require('./models').admin;
 const { QueryTypes } = require('sequelize');
 
-const port = 3000
+const port = process.env.PORT;
 app.get('/', (req, res) => res.send('response berhasil'));
 app.use(express.urlencoded({ extended: true }));
 
