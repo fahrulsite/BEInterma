@@ -6,25 +6,61 @@ const Donasi = require('./models').donasi;
 const Penerima = require('./models').penerima;
 const Penyaluran = require('./models').penyaluran;
 const Admin = require('./models').admin;
+const { QueryTypes } = require('sequelize');
 
-const port = process.env.PORT
-app.get('/', (req, res)=> res.send('response berhasil'));
-app.use(express.urlencoded({extended:true}));
+const port = 3000
+app.get('/', (req, res) => res.send('response berhasil'));
+app.use(express.urlencoded({ extended: true }));
 
 
-db.authenticate().then(()=>
+db.authenticate().then(() =>
     console.log('berhasil konek')
 );
-app.listen(port, ()=>{
+app.listen(port, () => {
     console.log("port berjalan di ");
 })
 
+app.post('/login', async (req, res) => {
+
+
+    var name = req.body.username;
+    var password = req.body.password;
+    
+    let datas = await db.query(`SELECT * FROM tb_admin WHERE username='${name}'`, { type: QueryTypes.SELECT })
+    if(datas.length > 0){
+        if (password == datas[0].password) {
+            console.log(name)
+            // res.json(datas)
+            res.json({
+                status: true,
+                message: 'sukses'
+            })
+        } else {
+            res.json({
+                status: false,
+                message: "Email and password does not match"
+            });
+        }
+
+        // console.log("oke")
+        // res.json(
+        //     datas,
+        // );
+    }else{
+        res.json({
+            status: false,
+            message: 'Username Tidak Ditemukan'
+         })
+        console.log("no")
+    }
+})
+
 //create donatur
-app.post('/donatur', async (req, res)=> {
+app.post('/donatur', async (req, res) => {
     try {
-        const {id, nama, alamat, kontak, photo} = req.body;
+        const { id, nama, alamat, kontak, photo } = req.body;
         const newDonatur = new Donatur({
-            id, nama, alamat, kontak, photo           
+            id, nama, alamat, kontak, photo
         })
 
         await newDonatur.save();
@@ -36,7 +72,7 @@ app.post('/donatur', async (req, res)=> {
 });
 
 //get all donatur
-app.get('/donatur', async (req, res)=>{
+app.get('/donatur', async (req, res) => {
     try {
         const getAllDonatur = await Donatur.findAll({});
         res.json(getAllDonatur);
@@ -47,11 +83,11 @@ app.get('/donatur', async (req, res)=>{
 })
 
 //get donatur by id
-app.get('/donatur/:id_donatur', async (req, res)=>{
+app.get('/donatur/:id_donatur', async (req, res) => {
     try {
         const id = req.params.id_donatur
         const getDonatur = await Donatur.findOne({
-            where : {id_donatur : id}
+            where: { id_donatur: id }
         })
         res.json(getDonatur)
     } catch (err) {
@@ -60,11 +96,11 @@ app.get('/donatur/:id_donatur', async (req, res)=>{
 })
 
 //delete donatur by id
-app.delete('/donatur/:id_donatur', async (req, res)=>{
+app.delete('/donatur/:id_donatur', async (req, res) => {
     try {
         const id = req.params.id_donatur
         const deleteDonatur = await Donatur.destroy({
-            where : {id_donatur :id}
+            where: { id_donatur: id }
         })
         await deleteDonatur
         res.json("berhasil dihapus")
@@ -74,17 +110,17 @@ app.delete('/donatur/:id_donatur', async (req, res)=>{
 })
 
 //update donatur by id
-app.put('/donatur/:id_donatur', async (req, res)=>{
+app.put('/donatur/:id_donatur', async (req, res) => {
     try {
-        const {nama, alamat, kontak, photo} = req.body
+        const { nama, alamat, kontak, photo } = req.body
         const id = req.params.id_donatur
         const updateDonatur = await Donatur.update({
             nama,
             alamat,
             kontak,
             photo
-        },{
-            where : {id_donatur : id}
+        }, {
+            where: { id_donatur: id }
         })
 
         await updateDonatur
@@ -96,11 +132,11 @@ app.put('/donatur/:id_donatur', async (req, res)=>{
 
 
 //===============================================
-app.post('/donasi', async (req, res)=> {
+app.post('/donasi', async (req, res) => {
     try {
-        const {id, id_donatur, tanggal, jumlah, bukti} = req.body;
+        const { id, id_donatur, tanggal, jumlah, bukti } = req.body;
         const newDonasi = new Donasi({
-            id, id_donatur,tanggal, jumlah, bukti
+            id, id_donatur, tanggal, jumlah, bukti
         })
 
         await newDonasi.save();
@@ -112,11 +148,11 @@ app.post('/donasi', async (req, res)=> {
 });
 
 //get all donasi
-app.get('/donasi', async (req, res)=>{
+app.get('/donasi', async (req, res) => {
     try {
-        const getAllDonasi = await Donasi.findAll({     
-            include :  ['donatur'],
-           });
+        const getAllDonasi = await Donasi.findAll({
+            include: ['donatur'],
+        });
         res.json(getAllDonasi);
 
     } catch (err) {
@@ -125,11 +161,11 @@ app.get('/donasi', async (req, res)=>{
 })
 
 //delete donasi by id
-app.delete('/donasi/:id_donasi', async (req, res)=>{
+app.delete('/donasi/:id_donasi', async (req, res) => {
     try {
         const id = req.params.id_donasi
         const deleteDonasi = await Donasi.destroy({
-            where : {id_donasi :id}
+            where: { id_donasi: id }
         })
         await deleteDonasi
         res.json("berhasil dihapus")
@@ -139,17 +175,17 @@ app.delete('/donasi/:id_donasi', async (req, res)=>{
 })
 
 //update donatur by id
-app.put('/donasi/:id_donasi', async (req, res)=>{
+app.put('/donasi/:id_donasi', async (req, res) => {
     try {
-        const {id_donatur, tanggal, jumlah, bukti} = req.body
+        const { id_donatur, tanggal, jumlah, bukti } = req.body
         const id = req.params.id_donasi
         const updateDonasi = await Donasi.update({
             id_donatur,
             tanggal,
             jumlah,
             bukti
-        },{
-            where : {id_donasi : id}
+        }, {
+            where: { id_donasi: id }
         })
 
         await updateDonasi
@@ -162,11 +198,11 @@ app.put('/donasi/:id_donasi', async (req, res)=>{
 
 //===================================================
 
-app.post('/penerima', async (req, res)=> {
+app.post('/penerima', async (req, res) => {
     try {
-        const {id, nama, alamat, kontak, } = req.body;
+        const { id, nama, alamat, kontak, } = req.body;
         const newPenerima = new Penerima({
-            id, nama,alamat, kontak, 
+            id, nama, alamat, kontak,
         })
 
         await newPenerima.save();
@@ -178,7 +214,7 @@ app.post('/penerima', async (req, res)=> {
 });
 
 //get all penerima
-app.get('/penerima', async (req, res)=>{
+app.get('/penerima', async (req, res) => {
     try {
         const getAllPenerima = await Penerima.findAll({});
         res.json(getAllPenerima);
@@ -189,11 +225,11 @@ app.get('/penerima', async (req, res)=>{
 })
 
 //delete penerima by id
-app.delete('/penerima/:id_penerima', async (req, res)=>{
+app.delete('/penerima/:id_penerima', async (req, res) => {
     try {
         const id = req.params.id_penerima
         const deletePenerima = await Penerima.destroy({
-            where : {id_penerima :id}
+            where: { id_penerima: id }
         })
         await deletePenerima
         res.json("berhasil dihapus")
@@ -203,16 +239,16 @@ app.delete('/penerima/:id_penerima', async (req, res)=>{
 })
 
 //update penerima by id
-app.put('/penerima/:id_penerima', async (req, res)=>{
+app.put('/penerima/:id_penerima', async (req, res) => {
     try {
-        const {nama, alamat, kontak} = req.body
+        const { nama, alamat, kontak } = req.body
         const id = req.params.id_penerima
         const updatePenerima = await Penerima.update({
             nama,
             alamat,
             kontak
-        },{
-            where : {id_penerima : id}
+        }, {
+            where: { id_penerima: id }
         })
 
         await updatePenerima
@@ -227,11 +263,11 @@ app.put('/penerima/:id_penerima', async (req, res)=>{
 
 //===================================================
 
-app.post('/penyaluran', async (req, res)=> {
+app.post('/penyaluran', async (req, res) => {
     try {
-        const {id_penerima, tanggal, jumlah, } = req.body;
+        const { id_penerima, tanggal, jumlah, } = req.body;
         const newPenyaluran = new Penyaluran({
-            id_penerima, tanggal,jumlah, 
+            id_penerima, tanggal, jumlah,
         })
 
         await newPenyaluran.save();
@@ -243,10 +279,10 @@ app.post('/penyaluran', async (req, res)=> {
 });
 
 //get all penyaluran
-app.get('/penyaluran', async (req, res)=>{
+app.get('/penyaluran', async (req, res) => {
     try {
         const getAllPenyaluran = await Penyaluran.findAll({
-            include : ['penerima']
+            include: ['penerima']
         });
         res.json(getAllPenyaluran);
 
@@ -256,11 +292,11 @@ app.get('/penyaluran', async (req, res)=>{
 })
 
 //delete penerima by id
-app.delete('/penyaluran/:id_penyaluran', async (req, res)=>{
+app.delete('/penyaluran/:id_penyaluran', async (req, res) => {
     try {
         const id = req.params.id_penyaluran
         const deletePenyaluran = await Penyaluran.destroy({
-            where : {id_penyaluran :id}
+            where: { id_penyaluran: id }
         })
         await deletePenyaluran
         res.json("berhasil dihapus")
@@ -270,16 +306,16 @@ app.delete('/penyaluran/:id_penyaluran', async (req, res)=>{
 })
 
 //update penerima by id
-app.put('/penyaluran/:id_penyaluran', async (req, res)=>{
+app.put('/penyaluran/:id_penyaluran', async (req, res) => {
     try {
-        const {id_penerima, tanggal, jumlah} = req.body
+        const { id_penerima, tanggal, jumlah } = req.body
         const id = req.params.id_penyaluran
         const updatePenyaluran = await Penyaluran.update({
             id_penerima,
             tanggal,
             jumlah
-        },{
-            where : {id_penyaluran : id}
+        }, {
+            where: { id_penyaluran: id }
         })
 
         await updatePenyaluran
@@ -289,5 +325,5 @@ app.put('/penyaluran/:id_penyaluran', async (req, res)=>{
     }
 })
 
-
+//test
 //===================================================
